@@ -52,3 +52,27 @@ for(int i=0;i<width+2;i++) cout<<"#";
 cout<<endl;
 cout<<"Score:"<<score<<endl;
 }
+void input()
+{
+	if(_kbhit())
+	{
+		switch(_getch())
+		{
+			case 'a':
+				dir=left;
+				break;
+			case 'd':
+				dir=right;
+				break;
+			case 'w':
+				dir=up;
+				break;
+			case 's':
+				dir=down;
+				break;
+			case 'x':
+				gameover=true;
+				break;
+		}
+	}
+}
