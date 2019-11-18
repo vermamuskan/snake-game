@@ -76,3 +76,15 @@ void input()
 		}
 	}
 }
+
+int main()
+{
+	setup();
+	while(!gameover())
+	{
+		Draw();
+		input();
+		algorithm();
+	}
+	return 0;	
+}
