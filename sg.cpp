@@ -1,74 +1,90 @@
-#include<iostream.h>
+//-------SYTHERIN GAME---------
+/*SUBMITTED BY : Muskan Verma(06501012018)
+			     Ritika Joshi(05401012018)
+			     Suchi Jha(0701012018)
+			     Tushti(06701012018)	
+*/
+#include<iostream>
 #include<conio.h>
+#include<stdlib.h>
 using namespace std;
 bool gameover;
 const int width=20;
 const int height=20;
 int x,y,fruitX,fruitY,score;
-int tailX[100],tailY[100];
+int tailX[100],tailY[100]; 
 int nTail;
 enum eDirection{STOP=0,LEFT,RIGHT,UP,DOWN};
 eDirection dir;
 
-void Setup(){
-gameover=false;
-dir=STOP;
-x=width/2;
-y=height/2;
-fruitX=rand()%width;
-fruitY=rand()%height;
-score=0;
-}
-
-void Draw(){
-system("cls");
-for(int i=0;i<width+2;i++)cout<<#;
-cout<<endl;
-for(int i=0;i<height;i++){
-for(int j=0;j<width;j++){
-
-if(j==0)
-cout<<"#";
-if(i==y&&j==x)
-cout<<"*";
-else if(i==fruitY&&j=fruitX)
-cout<<"%";
-else{
-bool print=false;
-for(int k=0;k<nTail;k++){ 
-if(tailX[k]==j&&tailY[k]==i){
-cout<<"*";
-print=true;
-}
-}
-if(!print)
-cout<<" " ;
-}
-if(j==width-1) cout<<"#";
-}
-cout<<endl;
-}
-for(int i=0;i<width+2;i++) cout<<"#";
-cout<<endl;
-cout<<"Score:"<<score<<endl;
-}
-void input()
+void Setup()
 {
-	if(_kbhit())
+	gameover=false;
+	dir=STOP;
+	x=width/2;  //initial position of snake
+	y=height/2;
+	fruitX=rand()%width;
+	fruitY=rand()%height;
+	score=0;
+}
+//=====fuction to draw board and generate fruit
+void Draw_Board()
+{
+	system("cls");
+	for(int i=0;i<width+2;i++)   
+		cout<<"*";
+	cout<<endl;
+	for(int i=0;i<height;i++)
+	{
+		for(int j=0;j<width;j++)
+		{
+			if(j==0)
+				cout<<"*";
+			if(i==y&&j==x)
+				cout<<"O";
+			else if(i==fruitY&&j==fruitX)
+				cout<<"@";
+			else
+			{
+				bool print=false;
+				for(int k=0;k<nTail;k++)
+				{ 
+					if(tailX[k]==j&&tailY[k]==i)
+					{
+						cout<<"o";
+						print=true;
+					}
+				}
+					if(!print)
+					cout<<" " ;
+			}
+			if(j==width-1) cout<<"*";
+	}
+		cout<<endl;
+	}
+	for(int i=0;i<width+2;i++) 
+		cout<<"*";
+	cout<<endl;
+	cout<<"Score:"<<score<<endl;
+}
+// function to process user input
+void user_input()
+{
+	if(_kbhit()) //keyboard hit
 	{
 		switch(_getch())
 		{
 			case 'a':
-				dir=left;
+				dir=LEFT;
 				break;
 			case 'd':
-				dir=right;
+				dir=RIGHT;
 				break;
 			case 'w':
-				dir=up;
+				dir=UP;
 				break;
 			case 's':
-				dir=down;
+				dir=DOWN;
 				break;
 			case 'x':
 				gameover=true;
@@ -77,14 +93,86 @@ void input()
 	}
 }
 
-int main()
+//function 
+void logic()
 {
-	setup();
-	while(!gameover())
+	int prevX =tailX[0];
+	int prevY=tailY[0];
+	int prev2X,prev2Y;
+	tailX[0]=x;
+	tailY[0]=y;
+	for(int i=1;i<nTail;i++)
 	{
-		Draw();
-		input();
-		algorithm();
+		prev2X=tailX[i];
+		prev2Y=tailY[i];
+	    tailX[i]=prevX;   
+		tailY[i]=prevY;
+		prevX=prev2X;
+		prevY=prev2Y;
 	}
-	return 0;	
+	switch(dir)
+	{
+		case LEFT:
+		x--;
+		break;
+		case RIGHT:
+		x++;
+		break;
+		case UP:
+		y--;
+		break;	
+		case DOWN:
+		y++;
+		break;
+		default:
+		break;
+	}
+	//if boundary  is touched => exit game
+	if(x<0||x>=width||y>=height||y<0)    
+		gameover=true;
+	//if touches itself => exit game   
+	for(int i=0;i<nTail;i++)
+	{
+		if(x==tailX[i]&& y==tailY[i])
+			gameover=true;
+	}
+	
+	if(x>=width) x=0; else if(x<0) x=width-1;  
+	if(y>=height) y=0; else if(y<0) y=height-1;
+			
+		if(x==fruitX && y==fruitY)
+		{
+			score+=10;
+			fruitX =rand() % width;
+			fruitY =rand() % height;
+			nTail++;
+		}
 }
+
+int main(){
+	int m,n;
+     Setup();
+     while(!gameover)
+     {
+	     Draw_Board();
+	     user_input();
+	     logic();
+     }
+    
+    for( m=0;m<100000;m++) //to slow
+	{
+		for(n=0;n<10000;n++)
+		{
+			
+		}
+	}
+	for(m=0;m<1000;m++) //to slow
+	{
+		for(n=0;n<1000;n++)
+		{
+			
+		}
+	}
+	return 0;
+}
+
